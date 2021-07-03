@@ -12,7 +12,7 @@ class ServerHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             with open(os.curdir + os.sep + "view" + os.sep + "hello.html", 'rb') as file:
-                self.wfile.write(string_from_html("hello.html").encode('utf-8'))
+                self.wfile.write(b''.join(string_from_html("hello.html")))
         elif self.path.endswith(".jpg"):
             self.send_response(200)
             self.send_header('Content-type', 'image/jpg')
@@ -35,7 +35,7 @@ def server_thread(port):
 
 def string_from_html(file_name):
     with open(os.curdir + os.sep + "view" + os.sep + file_name, 'rb') as file:
-        string = "".join([x.strip().decode("utf-8") for x in file.readlines()])
+        string = [x.strip() for x in file.readlines()]
         return string
 
 
