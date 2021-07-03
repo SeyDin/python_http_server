@@ -1,8 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
 
-html = '<html><body><h3>Hello from the Raspberry Pi</h3><img src="sam.jpg"/></body></html>'
-
 
 class ServerHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -17,6 +15,12 @@ class ServerHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'image/jpg')
             self.end_headers()
             with open(os.curdir + os.sep + "view" + os.sep + "images" + os.sep + self.path, 'rb') as file:
+                self.wfile.write(file.read())
+        elif self.path.endswith(".css"):
+            self.send_response(200)
+            self.send_header('Content-type', 'text/css')
+            self.end_headers()
+            with open(os.curdir + os.sep + "view" + os.sep + "css" + os.sep + self.path, 'rb') as file:
                 self.wfile.write(file.read())
         else:
             self.send_error(404, "Page Not Found {}".format(self.path))
