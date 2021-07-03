@@ -11,8 +11,7 @@ class ServerHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            with open(os.curdir + os.sep + "view" + os.sep + "hello.html", 'rb') as file:
-                self.wfile.write(b''.join(string_from_html("hello.html")))
+            self.wfile.write(list_of_bytes_from_html("hello.html"))
         elif self.path.endswith(".jpg"):
             self.send_response(200)
             self.send_header('Content-type', 'image/jpg')
@@ -23,8 +22,8 @@ class ServerHandler(BaseHTTPRequestHandler):
             self.send_error(404, "Page Not Found {}".format(self.path))
 
 
-def server_thread(port):
-    server_address = ('', port)
+def server_thread(server_port):
+    server_address = ('', server_port)
     httpd = HTTPServer(server_address, ServerHandler)
     try:
         httpd.serve_forever()
@@ -33,10 +32,10 @@ def server_thread(port):
     httpd.server_close()
 
 
-def string_from_html(file_name):
+def list_of_bytes_from_html(file_name):
     with open(os.curdir + os.sep + "view" + os.sep + file_name, 'rb') as file:
-        string = [x.strip() for x in file.readlines()]
-        return string
+        list_of_bytes = b''.join(file.readlines())
+        return list_of_bytes
 
 
 if __name__ == '__main__':
