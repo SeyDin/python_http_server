@@ -13,7 +13,7 @@ class ServerHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            self.wfile.write(list_of_bytes_from_html("hello.html"))
+            self.wfile.write(string_of_bytes_from_html("hello.html"))
         elif self.path.endswith(".jpg"):
             self.send_response(200)
             self.send_header('Content-type', 'image/jpg')
@@ -53,10 +53,10 @@ def server_thread(server_port):
     httpd.server_close()
 
 
-def list_of_bytes_from_html(file_name):
+def string_of_bytes_from_html(file_name):
     with open(os.curdir + os.sep + "view" + os.sep + file_name, 'rb') as file:
-        list_of_bytes = b''.join(file.readlines())
-        return list_of_bytes
+        string_of_bytes = b''.join(file.readlines())
+        return string_of_bytes
 
 
 if __name__ == '__main__':
