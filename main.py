@@ -1,5 +1,9 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
+import json
+
+from io import BytesIO
+from urllib.parse import urlparse
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 class ServerHandler(BaseHTTPRequestHandler):
@@ -24,6 +28,19 @@ class ServerHandler(BaseHTTPRequestHandler):
                 self.wfile.write(file.read())
         else:
             self.send_error(404, "Page Not Found {}".format(self.path))
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        body = self.rfile.read(content_length)
+        params = json.loads(urlparse(body).path.decode("utf-8"))
+        print(params)
+        self.send_response(200)
+        self.end_headers()
+        response = BytesIO()
+        response.write(b'This is POST request. ')
+        response.write(b'Received: ')
+        response.write(body)
+        self.wfile.write(response.getvalue())
 
 
 def server_thread(server_port):
